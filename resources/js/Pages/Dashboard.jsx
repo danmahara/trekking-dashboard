@@ -88,6 +88,8 @@ const ArrowRightIcon = () => (
 // ── Dashboard Component ───────────────────────────────────────────────────
 
 export default function Dashboard({ stats = {} }) {
+    console.log("Stats: ", stats);
+
     const {
         totalPackages = 19,
         activeBookings = 0,

@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
+// ── Icons ────────────────────────────────────────────────────────────────
+
 const BellIcon = () => (
     <svg fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
         style={{ width: 18, height: 18, color: '#64748b' }}>
@@ -24,18 +26,47 @@ const PersonIcon = () => (
     </svg>
 );
 
-export default function AdminNavbar({ title = 'Dashboard' }) {
+// Hamburger / X icon — animates between the two states
+const HamburgerIcon = ({ open }) => (
+    <svg
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        viewBox="0 0 24 24"
+        style={{ width: 22, height: 22, transition: 'transform 0.2s ease' }}
+    >
+        {open ? (
+            // X
+            <>
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </>
+        ) : (
+            // Hamburger
+            <>
+                <line x1="3" y1="7" x2="21" y2="7" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="17" x2="21" y2="17" />
+            </>
+        )}
+    </svg>
+);
+
+// ── Component ────────────────────────────────────────────────────────────
+
+export default function AdminNavbar({ title = 'Dashboard', onHamburgerClick, sidebarOpen }) {
     const { auth } = usePage().props;
     const user = auth?.user;
 
-    const [open, setOpen] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     // Close dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-                setOpen(false);
+                setDropdownOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -49,55 +80,52 @@ export default function AdminNavbar({ title = 'Dashboard' }) {
 
     return (
         <header className="admin-navbar">
-            {/* Page title */}
-            <h1 className="navbar-title">{title}</h1>
+            <div className="navbar-left">
+                {/* Hamburger — only visible on mobile */}
+                <button
+                    className="hamburger-btn"
+                    onClick={onHamburgerClick}
+                    aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={sidebarOpen}
+                >
+                    <HamburgerIcon open={sidebarOpen} />
+                </button>
+
+                <h1 className="navbar-title">{title}</h1>
+            </div>
 
             {/* Right-side actions */}
             <div className="navbar-actions">
                 {/* Bell */}
-                <button
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 6 }}
-                    title="Notifications"
-                >
+                <button className="navbar-icon-btn" title="Notifications">
                     <BellIcon />
                 </button>
 
                 {/* User dropdown */}
                 <div className="navbar-dropdown-wrap" ref={dropdownRef}>
                     <button
-                        className="navbar-avatar-btn"
-                        onClick={() => setOpen((v) => !v)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, width: 'auto', padding: '0 6px 0 0', borderRadius: 999, background: 'none', border: '1px solid #e2e8f0' }}
+                        className="navbar-user-btn"
+                        onClick={() => setDropdownOpen((v) => !v)}
                         title="Account"
                     >
-                        {/* Avatar circle */}
-                        <div style={{
-                            width: 32, height: 32, borderRadius: '50%',
-                            background: 'linear-gradient(135deg, #22c55e, #06b6d4)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            flexShrink: 0, position: 'relative',
-                        }}>
+                        {/* Avatar */}
+                        <div className="navbar-user-avatar">
                             <PersonIcon />
-                            {/* Online dot */}
-                            <span style={{
-                                position: 'absolute', bottom: 0, right: 0,
-                                width: 8, height: 8, borderRadius: '50%',
-                                background: '#22c55e', border: '2px solid white',
-                            }} />
+                            <span className="navbar-online-dot" />
                         </div>
-                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#0f172a', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 2 }}>
+                        <span className="navbar-user-name">
                             {user?.name ?? 'Admin'}
                         </span>
                         <ChevronDownIcon />
                     </button>
 
-                    {open && (
+                    {dropdownOpen && (
                         <div className="navbar-dropdown">
-                            <div style={{ padding: '10px 16px 8px', borderBottom: '1px solid #f1f5f9' }}>
-                                <div style={{ fontSize: '0.84rem', fontWeight: 600, color: '#0f172a' }}>{user?.name}</div>
-                                <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: 1 }}>{user?.email}</div>
+                            <div className="navbar-dropdown-header">
+                                <div className="navbar-dropdown-name">{user?.name}</div>
+                                <div className="navbar-dropdown-email">{user?.email}</div>
                             </div>
-                            <Link href={safeHref('profile.edit')} onClick={() => setOpen(false)}>
+                            <Link href={safeHref('profile.edit')} onClick={() => setDropdownOpen(false)}>
                                 Profile
                             </Link>
                             <div className="navbar-dropdown-divider" />
@@ -105,7 +133,7 @@ export default function AdminNavbar({ title = 'Dashboard' }) {
                                 href={safeHref('logout')}
                                 method="post"
                                 as="button"
-                                onClick={() => setOpen(false)}
+                                onClick={() => setDropdownOpen(false)}
                             >
                                 Log Out
                             </Link>

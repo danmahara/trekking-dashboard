@@ -1,31 +1,46 @@
+import { useState, useEffect } from 'react';
 import AdminSidebar from '@/Layouts/AdminSidebar';
 import AdminNavbar from '@/Layouts/AdminNavbar';
 
-// Import the core admin CSS (place this file at resources/css/admin.css)
-// import '@/../../resources/css/admin.css';
-import '../../css/admin.css'
+import '@/../../resources/css/admin.css';
 
-/**
- * AdminLayout
- *
- * Usage:
- *   <AdminLayout title="Dashboard">
- *     <YourContent />
- *   </AdminLayout>
- *
- * Props:
- *   title    — string shown in the top navbar (default: "Dashboard")
- *   children — page content
- */
 export default function AdminLayout({ title = 'Dashboard', children }) {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    // Close on ESC key
+    useEffect(() => {
+        const onKey = (e) => { if (e.key === 'Escape') setSidebarOpen(false); };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }, []);
+
+    // Lock body scroll when mobile sidebar is open
+    useEffect(() => {
+        document.body.style.overflow = sidebarOpen ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [sidebarOpen]);
+
     return (
         <div className="admin-shell">
-            {/* Fixed-height sidebar, independently scrollable */}
-            <AdminSidebar />
+            {/* Overlay — tapping it closes the sidebar on mobile */}
+            <div
+                className={`sidebar-overlay${sidebarOpen ? ' sidebar-overlay--visible' : ''}`}
+                onClick={() => setSidebarOpen(false)}
+            />
 
-            {/* Right side: navbar + scrollable content */}
+            {/* Sidebar — gets an "open" class on mobile */}
+            <AdminSidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+            />
+
+            {/* Right side */}
             <div className="admin-body">
-                <AdminNavbar title={title} />
+                <AdminNavbar
+                    title={title}
+                    onHamburgerClick={() => setSidebarOpen((v) => !v)}
+                    sidebarOpen={sidebarOpen}
+                />
                 <main className="admin-content">
                     {children}
                 </main>

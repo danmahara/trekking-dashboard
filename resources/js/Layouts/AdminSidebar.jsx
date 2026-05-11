@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 
-// ── Icons (inline SVGs keep zero extra deps) ──────────────────────────────
+// ── Icons ─────────────────────────────────────────────────────────────────
 
 const Icon = {
     Globe: () => (
@@ -86,7 +86,7 @@ const Icon = {
     ),
 };
 
-// ── Navigation structure ──────────────────────────────────────────────────
+// ── Nav structure ─────────────────────────────────────────────────────────
 
 const navSections = [
     {
@@ -119,10 +119,12 @@ const navSections = [
 
 // ── Component ─────────────────────────────────────────────────────────────
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ isOpen = false, onClose }) {
     const { auth } = usePage().props;
     const user = auth?.user;
-    const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'A';
+    const initials = user?.name
+        ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
+        : 'A';
 
     const isActive = (routeName) => {
         try { return route().current(routeName); }
@@ -135,7 +137,7 @@ export default function AdminSidebar() {
     };
 
     return (
-        <aside className="admin-sidebar">
+        <aside className={`admin-sidebar${isOpen ? ' admin-sidebar--open' : ''}`}>
             {/* Brand */}
             <div className="sidebar-logo">
                 <svg viewBox="0 0 40 40" width="38" height="38">
@@ -143,7 +145,7 @@ export default function AdminSidebar() {
                     <circle cx="20" cy="26" r="3" fill="#22c55e" />
                 </svg>
                 <div className="sidebar-logo-text">
-                    <span>Site Title</span>
+                    <span>Adventure Pathways</span>
                     <span>Admin Panel</span>
                 </div>
             </div>
@@ -165,6 +167,7 @@ export default function AdminSidebar() {
                                 key={routeName}
                                 href={safeHref(routeName)}
                                 className={`sidebar-item${isActive(routeName) ? ' active' : ''}`}
+                                onClick={onClose} // close sidebar on mobile nav tap
                             >
                                 <NavIcon />
                                 {label}
