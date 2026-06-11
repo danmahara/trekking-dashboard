@@ -1,8 +1,23 @@
 import { useState, useEffect } from 'react';
+import { usePage } from '@inertiajs/react';
+import { Toaster, toast } from 'react-hot-toast';
 import AdminSidebar from '@/Layouts/AdminSidebar';
 import AdminNavbar from '@/Layouts/AdminNavbar';
 
 import '@/../../resources/css/admin.css';
+
+// Defined OUTSIDE the layout so it isn't recreated on every render.
+function FlashToasts() {
+    const { flash } = usePage().props;
+    useEffect(() => {
+        if (flash?.success) toast.success(flash.success);
+        if (flash?.error) toast.error(flash.error);
+    }, [flash]);
+
+    console.log(flash);
+    return <Toaster position="top-right" toastOptions={{ duration: 3500 }} />;
+}
+
 
 export default function AdminLayout({ title = 'Dashboard', children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,6 +37,9 @@ export default function AdminLayout({ title = 'Dashboard', children }) {
 
     return (
         <div className="admin-shell">
+            {/* Toasts — mounted once, survives page navigation */}
+            <FlashToasts />
+
             {/* Overlay — tapping it closes the sidebar on mobile */}
             <div
                 className={`sidebar-overlay${sidebarOpen ? ' sidebar-overlay--visible' : ''}`}
