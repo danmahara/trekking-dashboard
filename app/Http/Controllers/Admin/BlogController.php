@@ -7,8 +7,6 @@ use App\Http\Requests\Admin\BlogRequest;
 use App\Http\Requests\Admin\BlogUpdateRequest;
 use App\Http\Requests\Admin\SeoRequest;
 use App\Models\Blog;
-use App\Traits\DatatableTrait;
-use App\Traits\InertiaTableTrait;
 use App\Traits\RowReOrderingTrait;
 use App\Traits\StatusTrait;
 use Illuminate\Contracts\View\View;
@@ -79,14 +77,20 @@ class BlogController extends Controller
 
     public function edit(Blog $blog)
     {
-        return Inertia::render("Admin/Blog/Form", ['blog' => $blog]);
+        return Inertia::render("Admin/Blog/Form", [
+            'blog' => [
+                ...$blog->toArray(),
+                'publish_date' => $blog->publish_date?->format('Y-m-d'),
+                'image_url' => $blog->feature_image?->getPath(),
+                'cover_url' => $blog->cover_image?->getPath(),
+            ],
+        ]);
     }
-
 
 
     public function update(BlogUpdateRequest $request, Blog $blog)
     {
-        $blog->update($request->safe()->except('image', 'cover', 'hashtags'));
+        $blog->update($request->safe()->except('image', 'cover'));
 
         // Feature image
         if ($request->hasFile('image')) {

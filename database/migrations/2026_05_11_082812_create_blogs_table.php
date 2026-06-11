@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id(); // bigint unsigned, auto_increment
 
-            $table->unsignedInteger('category_id')->nullable();
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
 
             $table->string('slug', 100);
             $table->string('title', 100);
@@ -34,6 +34,13 @@ return new class extends Migration {
             $table->boolean('is_featured')->default(0);
 
             $table->timestamps();
+
+            $table->unique('slug');
+            $table->index('publish_date');
+            $table->index('status');
+            $table->index('is_featured');
+            $table->index('order');
+            $table->index(['status', 'publish_date']); // composite — for public blog listing queries
         });
     }
 

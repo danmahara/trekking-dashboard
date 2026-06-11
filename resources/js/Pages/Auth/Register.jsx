@@ -1,5 +1,5 @@
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
+import InputLabel from '@/Components/Field';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
@@ -33,6 +33,7 @@ export default function Register() {
                         id="name"
                         name="name"
                         value={data.name}
+                        placeholder="Enter your name"
                         className="mt-1 block w-full"
                         autoComplete="name"
                         isFocused={true}
@@ -53,6 +54,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
+                        placeholder="Enter your email"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
@@ -67,8 +69,10 @@ export default function Register() {
                         id="password"
                         type="password"
                         name="password"
+                        placeholder="Enter your password"
                         value={data.password}
                         className="mt-1 block w-full"
+
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
@@ -87,6 +91,7 @@ export default function Register() {
                         id="password_confirmation"
                         type="password"
                         name="password_confirmation"
+                        placeholder="Confirm your password"
                         value={data.password_confirmation}
                         className="mt-1 block w-full"
                         autoComplete="new-password"

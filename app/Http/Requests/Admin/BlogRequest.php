@@ -22,17 +22,21 @@ class BlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3',
-            'slug' => "required|string|unique:blogs,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/",
+            'category_id' => 'nullable|integer',
+            'slug' => 'required|string|unique:blogs,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+            'title' => 'required|string|max:100|min:3',
+            'description' => 'required|string|min:5',
+            'short_title' => 'nullable|string|max:255',
+            'author' => 'nullable|string|max:100',
+            'author_post' => 'nullable|string|max:50',
+            'country' => 'nullable|string|max:50',
+            'quote' => 'nullable|string',
+            'publish_date' => 'required|date',
+            'order' => 'nullable|integer|min:0',
+            'status' => 'boolean',
+            'is_featured' => 'boolean',
             'image' => 'required|image|mimes:png,jpg,jpeg,svg,gif,webp|max:2048',
             'cover' => 'required|image|mimes:png,jpg,jpeg,svg,gif,webp|max:2048',
-            'publish_date' => 'required|string|min:5',
-            'description' => 'required|string|min:5',
-            'order' => 'nullable|numeric|min:0',
-            // 'category_id' => 'required|numeric',
-            'is_featured' => 'boolean',
-            'author' => 'required|string',
-            'status' => 'boolean',
         ];
     }
 

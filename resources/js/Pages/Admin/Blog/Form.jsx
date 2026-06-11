@@ -7,6 +7,10 @@
 import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import ImageUpload from "@/Components/Admin/ImageUpload";
+import InputLabel from "@/Components/Field";
+import Field from "@/Components/Field";
+import InputField from "@/Components/InputField";
+import TextareaField from "@/Components/TextareaField";
 
 const toSlug = (str) =>
     str.toLowerCase().trim()
@@ -99,26 +103,18 @@ export default function BlogForm({ categories = [], blog = null }) {
 
                             {/* Row 1: Title + Slug */}
                             <div className="bf-row">
-                                <Field label="Title" required error={errors.title}>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter blog title"
-                                        maxLength={100}
-                                        {...inputProps("title")}
-                                    />
-                                </Field>
-                                <Field
-                                    label="Slug" required
-                                    error={errors.slug}
+                                <InputField
+                                    label="Title" field="title" required
+                                    data={data} errors={errors} setData={setData}
+                                    placeholder="Enter blog title" maxLength={100}
+                                    extra={{ onChange: handleChange("title") }}
+                                />
+                                <InputField
+                                    label="Slug" field="slug" required
+                                    data={data} errors={errors} setData={setData}
+                                    placeholder="auto-generated-from-title" maxLength={100}
                                     hint={data.slug ? `yoursite.com/blog/${data.slug}` : ""}
-                                >
-                                    <input
-                                        type="text"
-                                        placeholder="auto-generated-from-title"
-                                        maxLength={100}
-                                        {...inputProps("slug")}
-                                    />
-                                </Field>
+                                />
                             </div>
 
                             {/* Row 2: Image + Cover — reusable ImageUpload */}
@@ -152,71 +148,50 @@ export default function BlogForm({ categories = [], blog = null }) {
                                         ))}
                                     </select>
                                 </Field>
-                                <Field label="Short Title" error={errors.short_title}>
-                                    <input
-                                        type="text"
-                                        placeholder="Short headline for cards"
-                                        maxLength={255}
-                                        {...inputProps("short_title")}
-                                    />
-                                </Field>
+
+                                <InputField label="Short title" field="short_title" required maxLength={255} type="text" data={data} errors={errors} setData={setData} />
+
                             </div>
 
                             {/* Row 4: Publish Date + Order No. */}
                             <div className="bf-row">
-                                <Field label="Publish Date" required error={errors.publish_date}>
-                                    <input type="date" {...inputProps("publish_date")} />
-                                </Field>
-                                <Field label="Order No." error={errors.order}>
-                                    <input
-                                        type="number" min={0} placeholder="0"
-                                        {...inputProps("order", { value: data.order })}
-                                    />
-                                </Field>
+                                <InputField label="Publish Date" field="publish_date" required
+                                    type="date" data={data} errors={errors} setData={setData} />
+
+                                <InputField label="Order No." field="order" required
+                                    type="number" data={data} errors={errors} setData={setData} />
                             </div>
 
 
-
-
                             {/* Description */}
-                            <Field label="Description" required error={errors.description} full>
-                                <textarea
-                                    rows={10}
-                                    placeholder="Write the blog content here…"
-                                    {...inputProps("description")}
-                                />
-                            </Field>
+                            <TextareaField
+                                label="Description" field="description" required full
+                                data={data} errors={errors} setData={setData}
+                                placeholder="Write the blog content here…"
+                                rows={10}
+                            />
 
                             {/* Row 5: Author + Author Position */}
                             <div className="bf-row">
-                                <Field label="Author" error={errors.author}>
-                                    <input
-                                        type="text" placeholder="e.g. Jane Doe" maxLength={100}
-                                        {...inputProps("author")}
-                                    />
-                                </Field>
-                                <Field label="Author Position" error={errors.author_post}>
-                                    <input
-                                        type="text" placeholder="e.g. Senior Editor" maxLength={50}
-                                        {...inputProps("author_post")}
-                                    />
-                                </Field>
+                                <InputField label="Author" field="author" required
+                                    type="text" data={data} errors={errors} setData={setData} />
+
+                                <InputField label="Author Position" field="author_post" required
+                                    type="text" data={data} errors={errors} setData={setData} placeholder="e.g. Senior Editor" />
                             </div>
 
                             {/* Row 6: Country + Quote */}
                             <div className="bf-row">
-                                <Field label="Country" error={errors.country}>
-                                    <input
-                                        type="text" placeholder="e.g. Nepal" maxLength={50}
-                                        {...inputProps("country")}
-                                    />
-                                </Field>
-                                <Field label="Pull Quote" error={errors.quote}>
-                                    <input
-                                        type="text" placeholder="A memorable quote to highlight"
-                                        {...inputProps("quote")}
-                                    />
-                                </Field>
+                                <InputField
+                                    label="Country" field="country"
+                                    data={data} errors={errors} setData={setData}
+                                    placeholder="e.g. Nepal" maxLength={50}
+                                />
+                                <InputField
+                                    label="Pull Quote" field="quote"
+                                    data={data} errors={errors} setData={setData}
+                                    placeholder="A memorable quote to highlight"
+                                />
                             </div>
 
                             {/* Checkboxes */}
@@ -258,20 +233,6 @@ export default function BlogForm({ categories = [], blog = null }) {
     );
 }
 
-// ── Field wrapper ─────────────────────────────────────────────────────────────
-function Field({ label, required = false, error, hint, full = false, children }) {
-    return (
-        <div className={`bf-field${full ? " bf-field--full" : ""}`}>
-            <label className="bf-label">
-                {label}
-                {required && <span className="bf-required">*</span>}
-            </label>
-            {children}
-            {error && <span className="bf-error">{error}</span>}
-            {hint && !error && <span className="bf-hint">{hint}</span>}
-        </div>
-    );
-}
 
 // ── Checkbox row ──────────────────────────────────────────────────────────────
 function CheckField({ name, checked, onChange, label, desc }) {
