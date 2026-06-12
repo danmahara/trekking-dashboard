@@ -96,7 +96,7 @@ const navSections = [
         ],
     },
     {
-        label: 'Inquiries',
+        label: 'Inquiries & Bookings',
         items: [
             { label: 'Newsletter', routeName: 'admin.newsletter.index', Icon: Icon.Mail },
             { label: 'Contact Us', routeName: 'admin.contact.index', Icon: Icon.Users },

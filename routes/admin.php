@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\FaqController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,5 +27,13 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     });
 
     Route::resource('blog-categories', BlogCategoryController::class)->except('show');
+
+    //---------------------------------------- FAQ ----------------------------------------
+    Route::controller(FaqController::class)->group(function () {
+        Route::patch('faqs/{id}/status', 'changeStatus')->name('faqs.status');
+        Route::post('faqs/reorder', 'rowReOrder')->name('blfaqs.reorder');
+    });
+
+    Route::resource('faqs', FaqController::class)->except('show');
 
 });

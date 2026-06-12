@@ -66,7 +66,7 @@ class BlogController extends Controller
 
         DB::commit();
 
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog Created Successfully!');
+        return redirect()->route('dmin.blogs.index')->with('success', 'Blog Created Successfully!');
     }
 
 
