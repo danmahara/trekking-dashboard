@@ -1397,3 +1397,250 @@ body {
         text-align: center;
     }
 }
+
+
+
+/* ==========================================================================
+   Admin Form Styles  (shared across all module forms)
+
+   Extracted verbatim from the original Blog form's scoped CSS — class names
+   and rules are unchanged so existing field components (InputField,
+   TextareaField, Field) that emit `af-*` classes keep working as-is.
+
+   Import ONCE globally, e.g. in resources/js/app.jsx:
+       import '../css/admin-form.css';
+   ========================================================================== */
+
+.af-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.af-card-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.af-card-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.af-card-body {
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.af-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 640px) {
+    .af-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.af-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.af-field--full {
+    grid-column: 1 / -1;
+}
+
+.af-label {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.af-required {
+    color: var(--color-accent-red);
+    margin-left: 2px;
+}
+
+.admin-input {
+    width: 100%;
+    padding: 9px 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    outline: none;
+    appearance: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.admin-input::placeholder {
+    color: var(--text-muted);
+}
+
+.admin-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+.admin-input.is-invalid {
+    border-color: var(--color-accent-red);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+textarea.admin-input {
+    resize: vertical;
+    line-height: 1.65;
+    min-height: 160px;
+}
+
+select.admin-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    cursor: pointer;
+}
+
+.af-error {
+    font-size: 0.75rem;
+    color: var(--color-accent-red);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.af-error::before {
+    content: '⚠';
+    font-size: 0.65rem;
+}
+
+.af-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    word-break: break-all;
+}
+
+.af-checks {
+    display: flex;
+    flex-direction: row !important;
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 4px;
+}
+
+.af-check-row {
+    width: 150px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--content-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+}
+
+.af-check-row:hover {
+    border-color: var(--color-primary);
+    background: rgba(34, 197, 94, 0.04);
+}
+
+.af-checkbox {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.af-check-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.af-check-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.af-check-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.af-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--card-border);
+}
+
+.af-btn-cancel {
+    padding: 8px 20px;
+    font-family: var(--font-sans);
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    transition: background 0.15s, color 0.15s;
+}
+
+.af-btn-cancel:hover {
+    background: var(--content-bg);
+    color: var(--text-primary);
+}
+
+.admin-create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-create-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.af-spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: af-spin 0.6s linear infinite;
+}
+
+@keyframes af-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

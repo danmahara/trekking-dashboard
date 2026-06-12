@@ -41,9 +41,9 @@ export default function ImageUpload({
         <>
             <style>{IU_CSS}</style>
             <div className="iu-wrap">
-                <label className="bf-label" htmlFor={name}>
+                <label className="af-label" htmlFor={name}>
                     {label}
-                    {required && <span className="bf-required"> *</span>}
+                    {required && <span className="af-required"> *</span>}
                 </label>
 
                 {/* File input row — no more ✕ here */}
@@ -87,7 +87,7 @@ export default function ImageUpload({
                     </div>
                 )}
 
-                {error && <span className="bf-error">{error}</span>}
+                {error && <span className="af-error">{error}</span>}
             </div>
         </>
     );

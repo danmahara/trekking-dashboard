@@ -1,14 +1,14 @@
 // ── Field wrapper ─────────────────────────────────────────────────────────────
 function Field({ label, required = false, error, hint, full = false, children }) {
     return (
-        <div className={`bf-field${full ? " bf-field--full" : ""}`}>
-            <label className="bf-label">
+        <div className={`af-field${full ? " af-field--full" : ""}`}>
+            <label className="af-label">
                 {label}
-                {required && <span className="bf-required">*</span>}
+                {required && <span className="af-required">*</span>}
             </label>
             {children}
-            {error && <span className="bf-error">{error}</span>}
-            {hint && !error && <span className="bf-hint">{hint}</span>}
+            {error && <span className="af-error">{error}</span>}
+            {hint && !error && <span className="af-hint">{hint}</span>}
         </div>
     );
 }

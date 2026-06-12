@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get("/dashboard", [AdminDashboardController::class, 'index'])->name('dashboard');
-
 
 
     //---------------------------------------- BLOG ----------------------------------------
@@ -19,5 +19,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     });
     Route::resource('blogs', BlogController::class)->except('show');
 
+    //---------------------------------------- BLOG CATEGORY ----------------------------------------
+    Route::controller(BlogCategoryController::class)->group(function () {
+        Route::patch('blog-categories/{id}/status', 'changeStatus')->name('blog-categories.status');
+        Route::post('blog-categories/reorder', 'rowReOrder')->name('blog-categories.reorder');
+    });
+
+    Route::resource('blog-categories', BlogCategoryController::class)->except('show');
 
 });

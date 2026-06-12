@@ -3,7 +3,6 @@
 //       'categories' => Category::all(['id','name']),
 //       'blog'       => $blog ?? null,   // null = create, Blog = edit
 //   ]);
-
 import { Head, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import ImageUpload from "@/Components/Admin/ImageUpload";
@@ -11,6 +10,7 @@ import InputLabel from "@/Components/Field";
 import Field from "@/Components/Field";
 import InputField from "@/Components/InputField";
 import TextareaField from "@/Components/TextareaField";
+import Breadcrumb from "@/Components/Breadcrumb";
 
 const toSlug = (str) =>
     str.toLowerCase().trim()
@@ -77,32 +77,26 @@ export default function BlogForm({ categories = [], blog = null }) {
             <Head title={isEditing ? "Edit Blog" : "Create Blog"} />
 
             {/* Breadcrumb */}
-            <nav className="admin-breadcrumb">
-                <span className="admin-breadcrumb-item">
-                    <a href={safeHref("admin.dashboard")}>Dashboard</a>
-                </span>
-                <span className="admin-breadcrumb-sep">›</span>
-                <span className="admin-breadcrumb-item">
-                    <a href={safeHref("admin.blogs.index")}>Our Blogs</a>
-                </span>
-                <span className="admin-breadcrumb-sep">›</span>
-                <span className="admin-breadcrumb-item">
-                    <strong>{isEditing ? "Edit Blog" : "Create Blog"}</strong>
-                </span>
-            </nav>
+            <Breadcrumb
+                items={[
+                    { label: "Dashboard", href: route("admin.dashboard") },
+                    { label: "Our Blogs", href: route("admin.blogs.index") },
+                    { label: isEditing ? "Edit Blog" : "Create Blog" },
+                ]}
+            />
 
             <form onSubmit={handleSubmit} noValidate>
-                <div className="bf-layout">
-                    <div className="admin-table-card bf-main">
+                <div className="af-layout">
+                    <div className="admin-table-card af-main">
 
-                        <div className="bf-card-header">
-                            <span className="bf-card-title">Blog Details</span>
-                        </div>
+                        {/* <div className="af-card-header">
+                            <span className="af-card-title">Blog Details</span>
+                        </div> */}
 
-                        <div className="bf-card-body">
+                        <div className="af-card-body">
 
                             {/* Row 1: Title + Slug */}
-                            <div className="bf-row">
+                            <div className="af-row">
                                 <InputField
                                     label="Title" field="title" required
                                     data={data} errors={errors} setData={setData}
@@ -118,7 +112,7 @@ export default function BlogForm({ categories = [], blog = null }) {
                             </div>
 
                             {/* Row 2: Image + Cover — reusable ImageUpload */}
-                            <div className="bf-row">
+                            <div className="af-row">
                                 <ImageUpload
                                     label="Feature Image"
                                     name="image"
@@ -139,7 +133,7 @@ export default function BlogForm({ categories = [], blog = null }) {
 
 
                             {/* Row 3: Category + Short Title */}
-                            <div className="bf-row">
+                            <div className="af-row">
                                 <Field label="Blog Category" error={errors.category_id}>
                                     <select {...inputProps("category_id")}>
                                         <option value="">Select Blog Category</option>
@@ -154,7 +148,7 @@ export default function BlogForm({ categories = [], blog = null }) {
                             </div>
 
                             {/* Row 4: Publish Date + Order No. */}
-                            <div className="bf-row">
+                            <div className="af-row">
                                 <InputField label="Publish Date" field="publish_date" required
                                     type="date" data={data} errors={errors} setData={setData} />
 
@@ -172,7 +166,7 @@ export default function BlogForm({ categories = [], blog = null }) {
                             />
 
                             {/* Row 5: Author + Author Position */}
-                            <div className="bf-row">
+                            <div className="af-row">
                                 <InputField label="Author" field="author" required
                                     type="text" data={data} errors={errors} setData={setData} />
 
@@ -181,7 +175,7 @@ export default function BlogForm({ categories = [], blog = null }) {
                             </div>
 
                             {/* Row 6: Country + Quote */}
-                            <div className="bf-row">
+                            <div className="af-row">
                                 <InputField
                                     label="Country" field="country"
                                     data={data} errors={errors} setData={setData}
@@ -195,7 +189,7 @@ export default function BlogForm({ categories = [], blog = null }) {
                             </div>
 
                             {/* Checkboxes */}
-                            <div className="bf-checks">
+                            <div className="af-checks">
                                 <CheckField
                                     name="status"
                                     checked={data.status}
@@ -215,166 +209,37 @@ export default function BlogForm({ categories = [], blog = null }) {
                 </div>
 
                 {/* Actions */}
-                <div className="bf-actions">
-                    <a href={safeHref("admin.blogs.index")} className="bf-btn-cancel">
+                <div className="af-actions">
+                    <a href={safeHref("admin.blogs.index")} className="af-btn-cancel">
                         Cancel
                     </a>
                     <button type="submit" className="admin-create-btn" disabled={processing}>
                         {processing
-                            ? <><span className="bf-spinner" /> Saving…</>
+                            ? <><span className="af-spinner" /> Saving…</>
                             : isEditing ? "Update Blog" : "Create Blog"
                         }
                     </button>
                 </div>
             </form>
-
-            <style>{CSS}</style>
         </AdminLayout>
     );
 }
 
-
 // ── Checkbox row ──────────────────────────────────────────────────────────────
 function CheckField({ name, checked, onChange, label, desc }) {
     return (
-        <label className="bf-check-row" htmlFor={name}>
+        <label className="af-check-row" htmlFor={name}>
             <input
                 type="checkbox"
                 id={name} name={name}
                 checked={checked}
                 onChange={onChange}
-                className="bf-checkbox"
+                className="af-checkbox"
             />
-            <div className="bf-check-text">
-                <span className="bf-check-label">{label}</span>
-                {desc && <span className="bf-check-desc">{desc}</span>}
+            <div className="af-check-text">
+                <span className="af-check-label">{label}</span>
+                {desc && <span className="af-check-desc">{desc}</span>}
             </div>
         </label>
     );
 }
-
-// ── Scoped CSS ────────────────────────────────────────────────────────────────
-const CSS = `
-.bf-layout { display: flex; flex-direction: column; gap: 20px; }
-
-.bf-card-header {
-    display: flex; align-items: center;
-    padding: 16px 22px;
-    border-bottom: 1px solid var(--card-border);
-}
-.bf-card-title {
-    font-family: var(--font-display);
-    font-size: 0.95rem; font-weight: 700;
-    color: var(--text-primary); letter-spacing: -0.01em;
-}
-
-.bf-card-body {
-    padding: 24px 22px;
-    display: flex; flex-direction: column; gap: 20px;
-}
-
-.bf-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-@media (max-width: 640px) { .bf-row { grid-template-columns: 1fr; } }
-
-.bf-field { display: flex; flex-direction: column; gap: 6px; }
-.bf-field--full { grid-column: 1 / -1; }
-
-.bf-label {
-    font-family: var(--font-display);
-    font-size: 0.72rem; font-weight: 700;
-    letter-spacing: 0.07em; text-transform: uppercase;
-    color: var(--text-secondary);
-}
-.bf-required { color: var(--color-accent-red); margin-left: 2px; }
-
-.admin-input {
-    width: 100%; padding: 9px 12px;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    font-family: var(--font-sans);
-    font-size: 0.875rem; color: var(--text-primary);
-    outline: none; appearance: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
-}
-.admin-input::placeholder { color: var(--text-muted); }
-.admin-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
-}
-.admin-input.is-invalid {
-    border-color: var(--color-accent-red);
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-}
-textarea.admin-input { resize: vertical; line-height: 1.65; min-height: 160px; }
-select.admin-input {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 32px; cursor: pointer;
-}
-
-.bf-error {
-    font-size: 0.75rem; color: var(--color-accent-red);
-    display: flex; align-items: center; gap: 4px;
-}
-.bf-error::before { content: '⚠'; font-size: 0.65rem; }
-.bf-hint { font-size: 0.72rem; color: var(--text-muted); word-break: break-all; }
-
-.bf-checks { display: flex; flex-direction:row !important; width:100%; flex-direction: column; gap: 10px; padding-top: 4px; }
-.bf-check-row {
-    width: 150px;
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px;
-    background: var(--content-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px; cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    user-select: none;
-}
-.bf-check-row:hover {
-    border-color: var(--color-primary);
-    background: rgba(34, 197, 94, 0.04);
-}
-.bf-checkbox {
-    width: 17px; height: 17px;
-    accent-color: var(--color-primary);
-    cursor: pointer; flex-shrink: 0;
-}
-.bf-check-text { display: flex; flex-direction: column; gap: 1px; }
-.bf-check-label { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); }
-.bf-check-desc  { font-size: 0.75rem; color: var(--text-muted); }
-
-.bf-actions {
-    display: flex; align-items: center;
-    justify-content: flex-end; gap: 10px;
-    margin-top: 20px; padding-top: 20px;
-    border-top: 1px solid var(--card-border);
-}
-.bf-btn-cancel {
-    padding: 8px 20px;
-    font-family: var(--font-sans);
-    font-size: 0.83rem; font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none; border-radius: 8px;
-    border: 1px solid var(--card-border);
-    background: var(--card-bg);
-    transition: background 0.15s, color 0.15s;
-}
-.bf-btn-cancel:hover { background: var(--content-bg); color: var(--text-primary); }
-
-.admin-create-btn { display: inline-flex; align-items: center; gap: 6px; }
-.admin-create-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
-
-.bf-spinner {
-    display: inline-block; width: 12px; height: 12px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: white; border-radius: 50%;
-    animation: bf-spin 0.6s linear infinite;
-}
-@keyframes bf-spin { to { transform: rotate(360deg); } }
-`;

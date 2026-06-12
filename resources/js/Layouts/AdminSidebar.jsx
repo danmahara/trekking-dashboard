@@ -113,6 +113,7 @@ const navSections = [
             { label: 'Packages', routeName: 'admin.packages.index', Icon: Icon.Package },
             { label: 'Pages', routeName: 'admin.pages.index', Icon: Icon.FileText },
             { label: 'FAQs', routeName: 'admin.faqs.index', Icon: Icon.HelpCircle },
+            { label: 'Blog Categories', routeName: 'admin.blog-categories.index', Icon: Icon.Star },
             { label: 'Blogs', routeName: 'admin.blogs.index', Icon: Icon.HelpCircle },
         ],
     },
