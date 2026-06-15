@@ -34,6 +34,7 @@ const SearchIcon = () => (
 
 // ── Toggle Switch ─────────────────────────────────────────────────────────
 import { useState, useMemo, useCallback, useEffect, isValidElement, createElement } from 'react';
+import Swal from 'sweetalert2';
 
 export function StatusToggle({ active, onChange }) {
     const [isOn, setIsOn] = useState(active);
@@ -166,9 +167,25 @@ export default function AdminTable({
     const showStatus = resource && actions.status !== false;
     const hasActionsColumn = showEdit || showDelete || showStatus || !!extraActions;
 
-    const handleDelete = useCallback((row) => {
-        if (!confirm(confirmDelete(row))) return;
-        router.delete(route(`${resource}.destroy`, row.id), { preserveScroll: true });
+    const handleDelete = useCallback(async (row) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: confirmDelete(row),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            reverseButtons: true,
+        });
+
+        if (!result.isConfirmed) return;
+
+        router.delete(route(`${resource}.destroy`, row.id), {
+            preserveScroll: true,
+            showProgress: false,
+        });
     }, [resource, confirmDelete]);
 
 
