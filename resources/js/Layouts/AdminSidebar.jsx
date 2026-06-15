@@ -112,6 +112,7 @@ const navSections = [
             { label: 'Activities', routeName: 'admin.activities.index', Icon: Icon.Zap },
             { label: 'Packages', routeName: 'admin.packages.index', Icon: Icon.Package },
             { label: 'Pages', routeName: 'admin.pages.index', Icon: Icon.FileText },
+            { label: 'Faq Categories', routeName: 'admin.faq-categories.index', Icon: Icon.Star },
             { label: 'FAQs', routeName: 'admin.faqs.index', Icon: Icon.HelpCircle },
             { label: 'Blog Categories', routeName: 'admin.blog-categories.index', Icon: Icon.Star },
             { label: 'Blogs', routeName: 'admin.blogs.index', Icon: Icon.HelpCircle },
@@ -147,7 +148,7 @@ export default function AdminSidebar({ isOpen = false, onClose }) {
                     <circle cx="20" cy="26" r="3" fill="#22c55e" />
                 </svg>
                 <div className="sidebar-logo-text">
-                    <span>Adventure Pathways</span>
+                    <span>Dashboard</span>
                     <span>Admin Panel</span>
                 </div>
             </div>
